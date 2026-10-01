@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Meta Tags -->
+  <title>Move Score | Aplicativo Inteligente de Atividades Físicas</title>
+  <meta name="description" content="Move Score: aplicativo de atividades físicas que utiliza a câmera do dispositivo para capturar movimentos, analisar a execução dos exercícios, contar repetições e gerar uma pontuação.">
+  <meta name="keywords" content="Move Score, atividades físicas, visão computacional, exercícios com câmera, contagem de repetições, pontuação de exercícios, fitness tech">
+  <meta name="author" content="Thiago José Teles Gois, Paulo Guilherme Oliveira de Lima">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://movescore.app/">
+  <meta property="og:title" content="Move Score | Aplicativo Inteligente de Atividades Físicas">
+  <meta property="og:description" content="Aplicativo de atividades físicas que utiliza a câmera do dispositivo para capturar movimentos, analisar a execução dos exercícios, contar repetições e gerar uma pontuação.">
+  <meta property="og:image" content="assets/og-preview.png">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Move Score | Atividades Físicas e Tecnologia">
+  <meta name="twitter:description" content="Acompanhe seu desempenho por meio da tecnologia com análise de movimento em tempo real e contagem de repetições.">
+
+  <!-- Favicon SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='46' fill='%230f172a'/><path d='M30 65 L45 35 L58 50 L72 25' stroke='%2300f2fe' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/><circle cx='72' cy='25' r='6' fill='%2310b981'/></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Effects -->
+  <div class="ambient-glow glow-1" aria-hidden="true"></div>
+  <div class="ambient-glow glow-2" aria-hidden="true"></div>
+
+  <!-- Header / Navigation -->
+  <header class="site-header" id="site-header">
+    <div class="container header-container">
+      <a href="#hero" class="brand-logo" aria-label="Move Score Página Inicial">
+        <div class="logo-icon-wrap">
+          <svg class="logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="10" fill="url(#logo-grad)" />
+            <path d="M10 27L18 16L24 22L30 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="30" cy="12" r="3" fill="#10B981" />
+            <defs>
+              <linearGradient id="logo-grad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#0284C7"/>
+                <stop offset="1" stop-color="#0F172A"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="brand-text">Move<span class="brand-highlight">Score</span></span>
+        <span class="badge-mvp">MVP</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="nav-desktop" aria-label="Navegação Principal">
+        <ul class="nav-list">
+          <li><a href="#sobre" class="nav-link">Sobre</a></li>
+          <li><a href="#funcionalidades" class="nav-link">Funcionalidades</a></li>
+          <li><a href="#diferenciais" class="nav-link">Diferenciais</a></li>
+          <li><a href="#planos" class="nav-link">Planos & Preços</a></li>
+          <li><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
+          <li><a href="#projeto" class="nav-link">Líderes & Equipe</a></li>
+          <li><a href="#governanca" class="nav-link">Governança</a></li>
+        </ul>
+      </nav>
+
+      <!-- Action Button & Mobile Toggle -->
+      <div class="header-actions">
+        <a href="https://wa.me/55DDDNUMERO" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary header-cta">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67M9.07 7.72C8.88 7.72 8.56 7.79 8.29 8.08C8.01 8.38 7.25 9.1 7.25 10.58C7.25 12.05 8.32 13.47 8.47 13.67C8.62 13.87 10.53 16.97 13.53 18.14C16.03 19.12 16.53 18.92 17.08 18.87C17.63 18.82 18.84 18.15 19.09 17.45C19.34 16.74 19.34 16.14 19.26 16.01C19.19 15.89 19 15.82 18.72 15.68C18.44 15.54 17.08 14.87 16.83 14.77C16.58 14.67 16.4 14.63 16.21 14.91C16.03 15.19 15.5 15.82 15.34 16.01C15.18 16.2 15.02 16.22 14.74 16.08C14.47 15.94 13.57 15.64 12.51 14.7C11.68 13.96 11.12 13.05 10.96 12.78C10.8 12.5 10.94 12.35 11.08 12.21C11.21 12.08 11.37 11.87 11.51 11.71C11.65 11.55 11.7 11.43 11.79 11.24C11.88 11.05 11.84 10.89 11.77 10.75C11.7 10.61 11.14 9.24 10.91 8.68C10.68 8.14 10.45 8.21 10.28 8.2C10.12 8.2 9.94 8.19 9.75 8.19C9.56 8.19 9.26 8.26 9.07 8.46V7.72Z"/>
+          </svg>
+          <span>Contato</span>
+        </a>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu de navegação" aria-expanded="false">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Menu -->
+    <div class="nav-mobile" id="nav-mobile">
+      <ul class="nav-mobile-list">
+        <li><a href="#sobre" class="mobile-nav-link">Sobre</a></li>
+        <li><a href="#funcionalidades" class="mobile-nav-link">Funcionalidades</a></li>
+        <li><a href="#diferenciais" class="mobile-nav-link">Diferenciais</a></li>
+        <li><a href="#planos" class="mobile-nav-link">Planos & Preços</a></li>
+        <li><a href="#depoimentos" class="mobile-nav-link">Depoimentos</a></li>
+        <li><a href="#projeto" class="mobile-nav-link">Líderes & Equipe</a></li>
+        <li><a href="#governanca" class="mobile-nav-link">Governança</a></li>
+        <li><a href="#contato" class="mobile-nav-link">Contato</a></li>
+        <li class="mobile-cta-item">
+          <a href="https://wa.me/55DDDNUMERO" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block">
+            Abrir WhatsApp: [INSERIR TELEFONE]
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-container">
+        
+        <div class="hero-content">
+          <div class="hero-tag animate-on-scroll">
+            <span class="pulse-dot"></span>
+            <span>Inteligência Artificial & Atividades Físicas</span>
+          </div>
+
+          <h1 class="hero-title animate-on-scroll">
+            Move <span class="gradient-text">Score</span>
+          </h1>
+
+          <div class="hero-slogan-box animate-on-scroll">
+            <span class="placeholder-tag">[SLOGAN: INSERIR SLOGAN OFICIAL]</span>
+            <p class="hero-subtitle">
+              Aplicativo de atividades físicas que utiliza a câmera do dispositivo para capturar movimentos, analisar a execução dos exercícios, contar repetições e gerar uma pontuação.
+            </p>
+          </div>
+
+          <div class="hero-actions animate-on-scroll">
+            <a href="https://wa.me/55DDDNUMERO" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg" id="hero-cta-whatsapp">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67"/>
+              </svg>
+              <span>Fale pelo WhatsApp</span>
+            </a>
+            <a href="#sobre" class="btn btn-outline btn-lg" id="hero-cta-secondary">
+              <span>Conhecer o Projeto</span>
+              <svg class="arrow-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </a>
+          </div>
+
+          <!-- Quick Metrics Bar directly from project vision -->
+          <div class="hero-stats animate-on-scroll">
+            <div class="stat-item">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">Via Câmera</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">Real-Time</span>
+              <span class="stat-label">Análise de Execução</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">Auto</span>
+              <span class="stat-label">Contagem & Score</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual Mockup: Interactive AI Computer Vision Simulation -->
+        <div class="hero-visual animate-on-scroll">
+          <div class="device-mockup">
+            <div class="device-camera-lens"></div>
+            <div class="device-screen">
+              
+              <!-- Real-time HUD Elements -->
+              <div class="hud-top-bar">
+                <div class="hud-live-tag">
+                  <span class="live-indicator"></span> CÂMERA ATIVA
+                </div>
+                <div class="hud-fps">60 FPS • IA POSE</div>
+              </div>
+
+              <!-- Pose Tracking Overlay Simulation -->
+              <div class="pose-tracking-display">
+                <svg class="pose-skeleton-svg" viewBox="0 0 300 400" fill="none">
+                  <!-- Skeleton connections -->
+                  <line x1="150" y1="70" x2="150" y2="150" stroke="#00f2fe" stroke-width="3" stroke-dasharray="4 2"/>
+                  <line x1="150" y1="95" x2="100" y2="125" stroke="#00f2fe" stroke-width="3"/>
+                  <line x1="100" y1="125" x2="75" y2="175" stroke="#00f2fe" stroke-width="3"/>
+                  <line x1="150" y1="95" x2="200" y2="125" stroke="#00f2fe" stroke-width="3"/>
+                  <line x1="200" y1="125" x2="225" y2="175" stroke="#00f2fe" stroke-width="3"/>
+                  <line x1="150" y1="150" x2="115" y2="230" stroke="#10b981" stroke-width="3.5"/>
+                  <line x1="115" y1="230" x2="110" y2="330" stroke="#10b981" stroke-width="3.5"/>
+                  <line x1="150" y1="150" x2="185" y2="230" stroke="#10b981" stroke-width="3.5"/>
+                  <line x1="185" y1="230" x2="190" y2="330" stroke="#10b981" stroke-width="3.5"/>
+
+                  <!-- Keypoint landmarks -->
+                  <circle cx="150" cy="55" r="16" fill="rgba(0, 242, 254, 0.2)" stroke="#00f2fe" stroke-width="2"/>
+                  <circle cx="150" cy="55" r="5" fill="#00f2fe"/>
+                  <circle cx="100" cy="125" r="5" fill="#00f2fe"/>
+                  <circle cx="75" cy="175" r="6" fill="#10b981"/>
+                  <circle cx="200" cy="125" r="5" fill="#00f2fe"/>
+                  <circle cx="225" cy="175" r="6" fill="#10b981"/>
+                  <circle cx="150" cy="150" r="6" fill="#00f2fe"/>
+                  <circle cx="115" cy="230" r="7" fill="#10b981"/>
+                  <circle cx="185" cy="230" r="7" fill="#10b981"/>
+                  <circle cx="110" cy="330" r="6" fill="#00f2fe"/>
+                  <circle cx="190" cy="330" r="6" fill="#00f2fe"/>
+
+                  <!-- Dynamic Angle Indicator -->
+                  <path d="M 125 210 A 25 25 0 0 1 140 235" stroke="#f59e0b" stroke-width="2" fill="none"/>
+                  <text x="135" y="215" fill="#f59e0b" font-size="10" font-weight="700">92°</text>
+                </svg>
+
+                <div class="hud-target-box">
+                  <div class="target-corner tl"></div>
+                  <div class="target-corner tr"></div>
+                  <div class="target-corner bl"></div>
+                  <div class="target-corner br"></div>
+                  <div class="scan-line"></div>
+                </div>
+              </div>
+
+              <!-- HUD Metric Widgets -->
+              <div class="hud-widgets">
+                <div class="widget-card widget-score">
+                  <div class="widget-label">MOVE SCORE</div>
+                  <div class="widget-val-wrap">
+                    <span class="widget-val gradient-text">98</span>
+                    <span class="widget-unit">pts</span>
+                  </div>
+                  <div class="widget-sub">Execução Excelente</div>
+                </div>
+
+                <div class="widget-card widget-counter">
+                  <div class="widget-label">REPETIÇÕES</div>
+                  <div class="widget-val-wrap">
+                    <span class="widget-val" id="rep-counter">14</span>
+                    <span class="widget-unit">reps</span>
+                  </div>
+                  <div class="widget-sub">Contagem Automática</div>
+                </div>
+              </div>
+
+              <!-- HUD Bottom Status -->
+              <div class="hud-bottom-bar">
+                <div class="status-indicator">
+                  <span class="status-dot"></span> Movimento Capturado
+                </div>
+                <div class="status-note">Postura Correta</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO SOBRE / PROPOSTA DE VALOR & VISÃO DO MVP -->
+    <section class="section about-section" id="sobre">
+      <div class="container">
+        
+        <div class="section-header text-center animate-on-scroll">
+          <div class="section-tag">Proposta de Valor</div>
+          <h2 class="section-title">Sobre o Projeto <span class="gradient-text">Move Score</span></h2>
+          <p class="section-desc">
+            Tecnologia e atividade física unidas para transformar sua rotina de treinos por meio da inteligência visual.
+          </p>
+        </div>
+
+        <div class="about-grid">
+          <!-- Card de Descrição Oficial -->
+          <div class="glass-card about-card animate-on-scroll">
+            <div class="card-icon-header">
+              <div class="icon-circle icon-blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+              <span class="card-pill">Definição do Projeto</span>
+            </div>
+            <h3 class="card-title">O que é o Move Score?</h3>
+            <p class="card-text text-highlight">
+              "Aplicativo de atividades físicas que utiliza a câmera do dispositivo para capturar movimentos, analisar a execução dos exercícios, contar repetições e gerar uma pontuação."
+            </p>
+            <p class="card-note">
+              Sem a necessidade de sensores corporais caros ou equipamentos proprietários: basta posicionar o dispositivo e iniciar a prática.
+            </p>
+          </div>
+
+          <!-- Card de Visão do Canvas do MVP -->
+          <div class="glass-card about-card animate-on-scroll">
+            <div class="card-icon-header">
+              <div class="icon-circle icon-green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                  <path d="M2 12h20"></path>
+                </svg>
+              </div>
+              <span class="card-pill">Canvas do MVP • Visão</span>
+            </div>
+            <h3 class="card-title">Visão do MVP</h3>
+            <p class="card-text text-highlight">
+              "Tornar a prática de exercícios mais interativa, permitindo acompanhar a execução e a evolução por meio da captura de movimentos."
+            </p>
+            <p class="card-note">
+              O foco do Produto Mínimo Viável é entregar uma experiência dinâmica que valide a precisão do rastreamento postural e o engajamento do usuário.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO FUNCIONALIDADES / PRODUTOS & SERVIÇOS -->
+    <section class="section features-section" id="funcionalidades">
+      <div class="container">
+        
+        <div class="section-header text-center animate-on-scroll">
+          <div class="section-tag">Recursos do Aplicativo</div>
+          <h2 class="section-title">Como o <span class="gradient-text">Move Score</span> Funciona</h2>
+          <p class="section-desc">
+            Quatro pilares essenciais integrados em uma experiência fluida através da câmera do seu próprio aparelho.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          
+          <!-- Feature 1: Captura de Movimentos -->
+          <div class="glass-card feature-card animate-on-scroll">
+            <div class="feature-number">01</div>
+            <div class="feature-icon icon-cyan">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </div>
+            <h3 class="feature-title">Captura de Movimentos</h3>
+            <p class="feature-desc">
+              Utiliza diretamente a câmera do dispositivo do usuário para registrar a movimentação corporal durante os treinos em tempo real.
+            </p>
+            <div class="feature-badge">Câmera do Dispositivo</div>
+          </div>
+
+          <!-- Feature 2: Análise da Execução -->
+          <div class="glass-card feature-card animate-on-scroll">
+            <div class="feature-number">02</div>
+            <div class="feature-icon icon-emerald">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </div>
+            <h3 class="feature-title">Análise da Execução</h3>
+            <p class="feature-desc">
+              Analisa a postura e a correta execução biomecânica de cada exercício físico, identificando ângulos e consistência no movimento.
+            </p>
+            <div class="feature-badge">Análise Postural</div>
+          </div>
+
+          <!-- Feature 3: Contagem de Repetições -->
+          <div class="glass-card feature-card animate-on-scroll">
+            <div class="feature-number">03</div>
+            <div class="feature-icon icon-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <h3 class="feature-title">Contador de Repetições</h3>
+            <p class="feature-desc">
+              Conta repetições automaticamente a cada ciclo completo do exercício, dispensando anotações manuais ou toques na tela.
+            </p>
+            <div class="feature-badge">Contagem Automatizada</div>
+          </div>
+
+          <!-- Feature 4: Geração de Pontuação -->
+          <div class="glass-card feature-card animate-on-scroll">
+            <div class="feature-number">04</div>
+            <div class="feature-icon icon-purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <h3 class="feature-title">Geração de Pontuação</h3>
+            <p class="feature-desc">
+              Gera uma pontuação (Score) ao final de cada exercício, permitindo mensurar a qualidade técnica e evolução individual.
+            </p>
+            <div class="feature-badge">Move Score Index</div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO BENEFÍCIOS / DIFERENCIAIS -->
+    <section class="section differentials-section" id="diferenciais">
+      <div class="container">
+        
+        <div class="section-header text-center animate-on-scroll">
+          <div class="section-tag">Diferenciais</div>
+          <h2 class="section-title">Por que escolher o <span class="gradient-text">Move Score</span>?</h2>
+          <p class="section-desc">
+            Benefícios práticos desenhados para conectar saúde, constância e evolução tecnológica.
+          </p>
+        </div>
+
+        <div class="differentials-grid">
+          
+          <div class="diff-card animate-on-scroll">
+            <div class="diff-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+            </div>
+            <div class="diff-content">
+              <h3 class="diff-title">Prática Interativa e Engajadora</h3>
+              <p class="diff-desc">
+                Transforma o exercício solitário em uma atividade dinâmica e interativa, com feedback de pontuação instantâneo.
+              </p>
+            </div>
+          </div>
+
+          <div class="diff-card animate-on-scroll">
+            <div class="diff-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </div>
+            <div class="diff-content">
+              <h3 class="diff-title">Acompanhamento da Evolução</h3>
+              <p class="diff-desc">
+                Permite acompanhar a evolução contínua dos exercícios e comparar o histórico de desempenho a cada novo treino.
+              </p>
+            </div>
+          </div>
+
+          <div class="diff-card animate-on-scroll">
+            <div class="diff-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              </svg>
+            </div>
+            <div class="diff-content">
+              <h3 class="diff-title">Zero Acessórios Extras</h3>
+              <p class="diff-desc">
+                Dispensa wearables caros ou sensores adicionais: a inteligência computacional opera diretamente com a câmera existente no seu smartphone ou tablet.
+              </p>
+            </div>
+          </div>
+
+          <div class="diff-card animate-on-scroll">
+            <div class="diff-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <div class="diff-content">
+              <h3 class="diff-title">Precisão na Execução</h3>
+              <p class="diff-desc">
+                Mais segurança física e eficácia esportiva, assegurando que o movimento conte apenas quando executado na amplitude e padrão adequados.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO PLANOS & PREÇOS (Informações não presentes no print - Placeholders marcados) -->
+    <section class="section pricing-section" id="planos">
+      <div class="container">
+        
+        <div class="section-header text-center animate-on-scroll">
+          <div class="section-tag">Acesso & Investimento</div>
+          <h2 class="section-title">Planos e <span class="gradient-text">Preços</span></h2>
+          <p class="section-desc">
+            Informações sobre o modelo de acesso do Move Score. Não constam valores específicos nos prints do MVP, identificados a seguir por placeholders.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          
+          <!-- Plano MVP / Beta -->
+          <div class="glass-card pricing-card featured animate-on-scroll">
+            <div class="pricing-badge">Fase Piloto • MVP</div>
+            <div class="pricing-header">
+              <h3 class="pricing-plan-title">Acesso Piloto / MVP</h3>
+              <p class="pricing-plan-desc">Acesso para validação da tecnologia de visão computacional e contagem de movimentos.</p>
+            </div>
+            <div class="pricing-price-box">
+              <span class="placeholder-tag">[INSERIR PREÇO / GRATUITO NO MVP]</span>
+              <div class="price-val">R$ 0<span class="price-period">/ período de testes</span></div>
+            </div>
+            <ul class="pricing-features-list">
+              <li>
+                <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Captura de movimentos via câmera</span>
+              </li>
+              <li>
+                <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Análise de execução dos exercícios</span>
+              </li>
+              <li>
+                <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Contador automático de repetições</span>
+              </li>
+              <li>
+                <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Geração de pontuação (Move Score)</span>
+              </li>
+            </ul>
+            <div class="pricing-cta-wrap">
+              <a href="https://wa.me/55DDDNUMERO" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block">
+                Solicitar Acesso ao MVP
+              </a>
+            </div>
+          </div>
+
+          <!-- Plano Comercial / Futuro -->
+          <div class="glass-card pricing-card animate-on-scroll">
+            <div class="pricing-badge future">Versão Futura</div>
+            <div class="pricing-header">
+              <h3 class="pricing-plan-title">Plano Comercial / Pro</h3>
+              <p class="pricing-plan-desc">Módulos avançados previstos após a consolidação do MVP inicial.</p>
+            </div>
+            <div class="pricing-price-box">
+              <span class="placeholder-tag">[INSERIR PREÇO / ASSINATURA]</span>
+              <div class="price-val">R$ --<span class="price-period">/ [A DEFINIR]</span></div>
+            </div>
+            <ul class="pricing-features-list">
+              <li>
+                <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Todos os recursos do MVP</span>
+              </li>
+              <li>
+                <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>[INSERIR HISTÓRICO AVANÇADO E GRÁFICOS]</span>
+              </li>
+              <li>
+                <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>[INSERIR TREINOS PERSONALIZADOS POR IA]</span>
+              </li>
+              <li>
+                <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>[INSERIR SUPORTE PRIORITÁRIO]</span>
+              </li>
+            </ul>
+            <div class="pricing-cta-wrap">
+              <a href="https://wa.me/55DDDNUMERO" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-block">
+                Lista de Espera: [INSERIR CONTATO]
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO DEPOIMENTOS (Não especificados nos prints - Placeholders marcados) -->
+    <section class="section testimonials-section" id="depoimentos">
+      <div class="container">
+        
+        <div class="section-header text-center animate-on-scroll">
+          <div class="section-tag">Prova Social</div>
+          <h2 class="section-title">Depoimentos & <span class="gradient-text">Avaliações</span></h2>
+          <p class="section-desc">
+            Espaço reservado para o feedback e avaliação dos praticantes de atividades físicas que testam o Move Score.
+          </p>
+        </div>
+
+        <div class="testimonials-grid">
+          
+          <div class="glass-card testimonial-card animate-on-scroll">
+            <div class="testimonial-stars" aria-label="5 estrelas">★★★★★</div>
+            <p class="testimonial-quote">
+              "[INSERIR DEPOIMENTO DE USUÁRIO: Exemplo: A contagem automática via câmera e o score motivaram muito o meu treino em casa.]"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar placeholder-avatar">
+                <span>U1</span>
+              </div>
+              <div class="author-meta">
+                <h4 class="author-name">[INSERIR NOME DO USUÁRIO 1]</h4>
+                <p class="author-role">[INSERIR PERFIL: Ex. Praticante de Atividade Física]</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card testimonial-card animate-on-scroll">
+            <div class="testimonial-stars" aria-label="5 estrelas">★★★★★</div>
+            <p class="testimonial-quote">
+              "[INSERIR DEPOIMENTO DE TESTADOR: Exemplo: A precisão da análise postural ajuda a não realizar movimentos incorretos.]"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar placeholder-avatar">
+                <span>U2</span>
+              </div>
+              <div class="author-meta">
+                <h4 class="author-name">[INSERIR NOME DO USUÁRIO 2]</h4>
+                <p class="author-role">[INSERIR PERFIL: Ex. Entusiasta de Fitness Tech]</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card testimonial-card animate-on-scroll">
+            <div class="testimonial-stars" aria-label="5 estrelas">★★★★★</div>
+            <p class="testimonial-quote">
+              "[INSERIR DEPOIMENTO DE PROFISSIONAL: Exemplo: Acompanhar o desempenho por tecnologia facilita a adesão aos exercícios.]"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar placeholder-avatar">
+                <span>U3</span>
+              </div>
+              <div class="author-meta">
+                <h4 class="author-name">[INSERIR NOME DO USUÁRIO 3]</h4>
+                <p class="author-role">[INSERIR PERFIL: Ex. Personal Trainer / Avaliador]</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO PROJETO: LÍDERES, EQUIPE & PÚBLICO-ALVO (Atende estritamente aos Prints) -->
+    <section class="section project-section" id="projeto">
+      <div class="container">
+        
+        <div class="section-header text-center animate-on-scroll">
+          <div class="section-tag">Governança & Equipe</div>
+          <h2 class="section-title">Líderes, Equipe e <span class="gradient-text">Público-Alvo</span></h2>
+          <p class="section-desc">
+            Informações institucionais e operacionais detalhadas do projeto Move Score conforme documentação de requisitos.
+          </p>
+        </div>
+
+        <div class="project-details-grid">
+          
+          <!-- Card de Público-Alvo -->
+          <div class="glass-card project-card audience-card animate-on-scroll">
+            <div class="project-card-header">
+              <div class="card-icon-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <span class="sub-label">Segmento Estratégico</span>
+            </div>
+            
+            <h3 class="project-card-title">Público-Alvo Definido</h3>
+            <blockquote class="official-quote">
+              "Pessoas que desejam praticar exercícios físicos e acompanhar seu desempenho por meio da tecnologia."
+            </blockquote>
+            
+            <div class="audience-tags">
+              <span class="chip">Praticantes de Atividades Físicas</span>
+              <span class="chip">Entusiastas de Tecnologia</span>
+              <span class="chip">Treino em Casa / Autônomo</span>
+              <span class="chip">Monitoramento de Desempenho</span>
+            </div>
+          </div>
+
+          <!-- Card de Liderança e Integrantes -->
+          <div class="glass-card project-card team-card animate-on-scroll">
+            <div class="project-card-header">
+              <div class="card-icon-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <line x1="19" y1="8" x2="19" y2="14"></line>
+                  <line x1="22" y1="11" x2="16" y2="11"></line>
+                </svg>
+              </div>
+              <span class="sub-label">Estrutura do Projeto</span>
+            </div>
+
+            <h3 class="project-card-title">Líderes e Integrantes</h3>
+            
+            <div class="team-list">
+              
+              <!-- Líder do Projeto -->
+              <div class="team-member-item leader-highlight">
+                <div class="member-avatar">
+                  <span>TJ</span>
+                </div>
+                <div class="member-info">
+                  <div class="member-role-badge">Líder do Projeto</div>
+                  <h4 class="member-name">Thiago José Teles Gois</h4>
+                  <p class="member-desc">Liderança de projeto, planejamento do MVP e coordenação de desenvolvimento.</p>
+                </div>
+              </div>
+
+              <!-- Integrante 2 -->
+              <div class="team-member-item">
+                <div class="member-avatar">
+                  <span>PG</span>
+                </div>
+                <div class="member-info">
+                  <div class="member-role-badge role-member">Integrante</div>
+                  <h4 class="member-name">Paulo Guilherme Oliveira de Lima</h4>
+                  <p class="member-desc">Desenvolvimento técnico e colaboração na estruturação do produto.</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO POLÍTICA DE GOVERNANÇA (Atendendo expressamente ao requisito do Print 2) -->
+    <section class="section governance-section" id="governanca">
+      <div class="container">
+        
+        <div class="section-header text-center animate-on-scroll">
+          <div class="section-tag">Conformidade & Diretrizes</div>
+          <h2 class="section-title">Política de <span class="gradient-text">Governança Adotada</span></h2>
+          <p class="section-desc">
+            Requisito mandatório do projeto detalhando o modelo de gestão, tomada de decisões e integridade técnica.
+          </p>
+        </div>
+
+        <div class="glass-card governance-container animate-on-scroll">
+          <div class="governance-header-box">
+            <div class="gov-badge-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <div>
+              <span class="gov-status-label">STATUS DO DOCUMENTO</span>
+              <h3 class="gov-heading">Diretrizes de Governança do Projeto Move Score</h3>
+            </div>
+          </div>
+
+          <div class="governance-content-box">
+            <div class="placeholder-alert">
+              <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <div>
+                <strong>[INSERIR POLÍTICA DE GOVERNANÇA ADOTADA]</strong>
+                <p>
+                  Conforme solicitado no plano do projeto (Print 2: <em>"informando de forma clara: os líderes do projeto, o público-alvo definido e a política de governança adotada"</em>), insira aqui a descrição oficial das diretrizes de governança pactuadas pela liderança.
+                </p>
+              </div>
+            </div>
+
+            <div class="gov-structure-preview">
+              <div class="gov-col">
+                <h4>1. Tomada de Decisão & Papéis</h4>
+                <p>
+                  Coordenação centralizada sob o <strong>Líder do Projeto (Thiago José Teles Gois)</strong> e colaboração técnica ativa do integrante <strong>(Paulo Guilherme Oliveira de Lima)</strong> com entregas iterativas do MVP.
+                </p>
+              </div>
+              <div class="gov-col">
+                <h4>2. Segurança & Privacidade Visual</h4>
+                <p>
+                  Tratamento de dados de captura da câmera estritamente local (client-side/edge) priorizando a privacidade dos movimentos dos usuários.
+                </p>
+              </div>
+              <div class="gov-col">
+                <h4>3. Controle de Versão & Qualidade</h4>
+                <p>
+                  Padrões de desenvolvimento em código aberto/versionado, testes contínuos de precisão dos modelos de pose e validação com o público-alvo.
+                </p>
+              </div>
+            </div>
+
+            <div class="gov-action-note">
+              <span>Para atualizar este documento: [INSERIR LINK OU DIRETRIZ DA POLÍTICA FORMAL DE GOVERNANÇA]</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO CTA FINAL -->
+    <section class="section cta-final-section" id="contato">
+      <div class="container">
+        
+        <div class="cta-banner animate-on-scroll">
+          <div class="cta-glow" aria-hidden="true"></div>
+          
+          <div class="cta-content">
+            <span class="cta-tag">Conecte-se Conosco</span>
+            <h2 class="cta-title">Acompanhe o desenvolvimento do <span class="gradient-text">Move Score</span></h2>
+            <p class="cta-text">
+              Deseja saber mais sobre a tecnologia de captura de movimentos, sugerir funcionalidades ou acompanhar o MVP de perto? Fale com a equipe do projeto.
+            </p>
+            
+            <div class="cta-buttons">
+              <a href="https://wa.me/55DDDNUMERO" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg" id="final-cta-whatsapp">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67"/>
+                </svg>
+                <span>Falar via WhatsApp: [INSERIR NÚMERO]</span>
+              </a>
+              <a href="mailto:[INSERIR E-MAIL]" class="btn btn-secondary btn-lg" id="final-cta-email">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span>Enviar E-mail: [INSERIR E-MAIL]</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RODAPÉ INSTITUCIONAL -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      
+      <div class="footer-grid">
+        <!-- Coluna 1: Marca & Descrição -->
+        <div class="footer-col footer-brand-col">
+          <div class="brand-logo footer-logo">
+            <span class="brand-text">Move<span class="brand-highlight">Score</span></span>
+          </div>
+          <p class="footer-text">
+            Aplicativo de atividades físicas que utiliza a câmera do dispositivo para capturar movimentos, analisar a execução dos exercícios, contar repetições e gerar uma pontuação.
+          </p>
+          <div class="footer-mvp-badge">Projeto em Desenvolvimento • Canvas MVP</div>
+        </div>
+
+        <!-- Coluna 2: Navegação Rápida -->
+        <div class="footer-col">
+          <h4 class="footer-title">Navegação</h4>
+          <ul class="footer-links">
+            <li><a href="#hero">Início</a></li>
+            <li><a href="#sobre">Sobre o Projeto</a></li>
+            <li><a href="#funcionalidades">Funcionalidades</a></li>
+            <li><a href="#diferenciais">Diferenciais</a></li>
+            <li><a href="#planos">Planos & Preços</a></li>
+            <li><a href="#depoimentos">Depoimentos</a></li>
+            <li><a href="#projeto">Líderes & Equipe</a></li>
+            <li><a href="#governanca">Governança</a></li>
+          </ul>
+        </div>
+
+        <!-- Coluna 3: Informações do Projeto -->
+        <div class="footer-col">
+          <h4 class="footer-title">Estrutura do Projeto</h4>
+          <ul class="footer-info-list">
+            <li><strong>Líder:</strong> Thiago José Teles Gois</li>
+            <li><strong>Integrante:</strong> Paulo Guilherme Oliveira de Lima</li>
+            <li><strong>Público-Alvo:</strong> Praticantes de exercícios com tecnologia</li>
+            <li><strong>Origem:</strong> Canvas do MVP</li>
+          </ul>
+        </div>
+
+        <!-- Coluna 4: Contatos & Redes Sociais (Placeholders Marcados) -->
+        <div class="footer-col">
+          <h4 class="footer-title">Canais de Contato</h4>
+          <ul class="footer-contact-list">
+            <li>
+              <span class="contact-key">WhatsApp:</span>
+              <a href="https://wa.me/55DDDNUMERO" target="_blank" rel="noopener noreferrer" class="contact-val">
+                [INSERIR TELEFONE / WHATSAPP]
+              </a>
+            </li>
+            <li>
+              <span class="contact-key">E-mail:</span>
+              <span class="contact-val">[INSERIR E-MAIL]</span>
+            </li>
+            <li>
+              <span class="contact-key">Horário:</span>
+              <span class="contact-val">[INSERIR HORÁRIO DE ATENDIMENTO / SUPORTE]</span>
+            </li>
+            <li>
+              <span class="contact-key">Localização:</span>
+              <span class="contact-val">[INSERIR ENDEREÇO / CIDADE]</span>
+            </li>
+          </ul>
+
+          <div class="social-links">
+            <a href="#" class="social-link" title="LinkedIn [INSERIR LINK]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+            <a href="#" class="social-link" title="GitHub [INSERIR LINK]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </a>
+            <a href="#" class="social-link" title="Instagram [INSERIR LINK]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright-text">
+          &copy; 2026 Move Score. Todos os direitos reservados. Líder: Thiago José Teles Gois | Integrantes: Thiago José Teles Gois e Paulo Guilherme Oliveira de Lima.
+        </p>
+        <p class="footer-subtext">
+          Desenvolvido com base no Canvas do MVP do projeto Move Score.
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp Action Button -->
+  <a href="https://wa.me/55DDDNUMERO" target="_blank" rel="noopener noreferrer" class="floating-whatsapp" aria-label="Falar no WhatsApp" title="WhatsApp: [INSERIR TELEFONE]">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67"/>
+    </svg>
+    <span class="floating-tooltip">Fale Conosco</span>
+  </a>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
